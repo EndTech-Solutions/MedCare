@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-/* ════════════════════════════════════════════════════════════════════════
-   SUPABASE CONFIG — apni keys yahan daalo
-   ════════════════════════════════════════════════════════════════════════ */
 const SUPA_URL = "https://iixubpzwizcdpecgwrhe.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpeHVicHp3aXpjZHBlY2d3cmhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDEyMjgsImV4cCI6MjA5NzcxNzIyOH0.zbquShDwFMLDjBP2tETskYpGHa39It8H0QKJIr1tNRE";
 
@@ -48,9 +45,6 @@ const supa = {
   }
 };
 
-/* ════════════════════════════════════════════════════════════════════════
-   UTILITIES
-   ════════════════════════════════════════════════════════════════════════ */
 const uid = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 const todayStr = () => new Date().toISOString().split("T")[0];
 const fmtDate = d => new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
@@ -91,9 +85,6 @@ function useWindowWidth() {
   return w;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   STATIC DATA
-   ════════════════════════════════════════════════════════════════════════ */
 const DOCTORS = [
   { id: "D001", name: "Dr. Priya Sharma", dept: "General Medicine", fee: 500, slots: ["09:00", "09:30", "10:00", "11:00", "14:00", "15:00"] },
   { id: "D002", name: "Dr. Arjun Mehta", dept: "Cardiology", fee: 1200, slots: ["10:00", "10:30", "11:00", "15:00", "15:30"] },
@@ -119,9 +110,6 @@ const PAYMENT_MODES = ["Cash", "UPI", "Card"];
 const DOC_TYPES = ["Report", "Prescription", "Test Result", "Other"];
 const STATUS_BADGE = { Pending: "yellow", Confirmed: "green", "In Progress": "blue", Completed: "blue", Cancelled: "red", "No Show": "gray", Paid: "green", Partial: "yellow" };
 
-/* ════════════════════════════════════════════════════════════════════════
-   STYLES
-   ════════════════════════════════════════════════════════════════════════ */
 const S = {
   app: { display: "flex", height: "100vh", overflow: "hidden", fontFamily: "'DM Sans',sans-serif", background: "#0d1117", color: "#e6edf3", fontSize: 14 },
   card: (extra = {}) => ({ background: "#161b22", border: "1px solid #2d3748", borderRadius: 12, ...extra }),
@@ -146,9 +134,6 @@ const S = {
   tab: (active) => ({ padding: "7px 16px", borderRadius: 6, cursor: "pointer", fontSize: 13, fontWeight: active ? 700 : 500, color: active ? "#e6edf3" : "#8b949e", background: active ? "#161b22" : "transparent" }),
 };
 
-/* ════════════════════════════════════════════════════════════════════════
-   SHARED COMPONENTS
-   ════════════════════════════════════════════════════════════════════════ */
 function Badge({ status }) { return <span style={S.badge(STATUS_BADGE[status] || "gray")}>{status}</span>; }
 function Avt({ name }) { return <div style={S.avatar(name)}>{(name || "?").split(" ").map(w => w[0]).slice(0, 2).join("")}</div>; }
 function FG({ label, children }) { return <div style={{ display: "flex", flexDirection: "column" }}><label style={S.label}>{label}</label>{children}</div>; }
@@ -182,8 +167,7 @@ function Toast({ message, onClose }) {
       ✓ {message}
     </div>
   );
-}
-
+         }
 function ResponsiveTable({ columns, rows, emptyText, isMobile, onRowClick, keyField = "id" }) {
   if (isMobile) {
     return (
@@ -260,13 +244,10 @@ function NotificationBell({ notifications, setNotifications }) {
   );
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   LOGIN SCREEN
-   ════════════════════════════════════════════════════════════════════════ */
 function LoginScreen({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState("signin"); // signin | signup
+  const [mode, setMode] = useState("signin");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -295,14 +276,12 @@ function LoginScreen({ onLogin }) {
           <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 32, fontWeight: 800, color: "#00d9a3" }}>MedCare</div>
           <div style={{ fontSize: 14, color: "#8b949e", marginTop: 4 }}>Clinic Management System</div>
         </div>
-
         <div style={{ background: "#161b22", border: "1px solid #2d3748", borderRadius: 16, padding: 32 }}>
           <div style={{ display: "flex", gap: 4, background: "#1f2937", borderRadius: 8, padding: 4, marginBottom: 24 }}>
             {[["signin", "Sign In"], ["signup", "Create Account"]].map(([v, l]) => (
               <div key={v} onClick={() => { setMode(v); setError(""); }} style={{ ...S.tab(mode === v), flex: 1, textAlign: "center" }}>{l}</div>
             ))}
           </div>
-
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <FG label="Email">
               <input style={S.input} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="clinic@email.com" onKeyDown={e => e.key === "Enter" && submit()} />
@@ -310,5 +289,717 @@ function LoginScreen({ onLogin }) {
             <FG label="Password">
               <input style={S.input} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" onKeyDown={e => e.key === "Enter" && submit()} />
             </FG>
+            {error && <div style={{ background: "rgba(244,63,94,.1)", border: "1px solid rgba(244,63,94,.2)", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: "#f43f5e" }}>{error}</div>}
+            <button style={{ ...S.btn(), width: "100%", justifyContent: "center", padding: "12px", fontSize: 15, opacity: loading ? 0.7 : 1 }} onClick={submit} disabled={loading}>
+              {loading ? "Please wait…" : mode === "signin" ? "Sign In →" : "Create Account →"}
+            </button>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", fontSize: 12, color: "#4a5568", marginTop: 20 }}>
+          Powered by MedCare · Supabase Connected ✓
+        </div>
+      </div>
+    </div>
+  );
+}
 
-            {error && <div style={{ background: "rgba(244,63,94,.1)", border: "1px solid rgba(244,63,94,.2)", borderRadius:
+function Dashboard({ patients, appointments, bills, prescriptions, isMobile }) {
+  const today = todayStr();
+  const todayAppts = appointments.filter(a => a.date === today);
+  const totalRevenue = bills.reduce((s, b) => s + (b.paid || 0), 0);
+  const pending = appointments.filter(a => a.status === "Pending").length;
+  const upcoming = appointments.filter(a => a.date >= today && !["Cancelled", "Completed"].includes(a.status)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+  const stats = [
+    { label: "Total Patients", val: patients.length, icon: "🧑‍⚕️", col: "#00d9a3" },
+    { label: "Today's Appointments", val: todayAppts.length, icon: "📅", col: "#0ea5e9" },
+    { label: "Pending", val: pending, icon: "⏳", col: "#f59e0b" },
+    { label: "Revenue Collected", val: fmtCur(totalRevenue), icon: "💰", col: "#8b5cf6" },
+  ];
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 800, margin: "0 0 4px" }}>Good morning 👋</h2>
+        <p style={{ fontSize: 13, color: "#8b949e", margin: 0 }}>{new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 14, marginBottom: 24 }}>
+        {stats.map(s => (
+          <div key={s.label} style={{ ...S.statCard(), borderTop: `3px solid ${s.col}` }}>
+            <div style={{ fontSize: 24, marginBottom: 8 }}>{s.icon}</div>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 24, fontWeight: 800, color: s.col }}>{s.val}</div>
+            <div style={{ fontSize: 12, color: "#8b949e", marginTop: 4 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
+        <div style={{ ...S.card(), padding: 20 }}>
+          <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 16px" }}>Today's Schedule ({todayAppts.length})</h3>
+          {todayAppts.length === 0 ? <div style={{ textAlign: "center", padding: "24px 0", color: "#8b949e" }}>No appointments today</div> :
+            todayAppts.slice(0, 6).map(a => (
+              <div key={a.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#1f2937", borderRadius: 8, padding: "10px 14px", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Avt name={a.patientname} />
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 13 }}>{a.patientname}</div>
+                    <div style={{ fontSize: 11, color: "#8b949e" }}>{fmtTime12(a.time)} · {a.dept}</div>
+                  </div>
+                </div>
+                <Badge status={a.status} />
+              </div>
+            ))
+          }
+        </div>
+        <div style={{ ...S.card(), padding: 20 }}>
+          <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 16px" }}>Upcoming Appointments</h3>
+          {upcoming.length === 0 ? <div style={{ textAlign: "center", padding: "24px 0", color: "#8b949e" }}>No upcoming appointments</div> :
+            upcoming.slice(0, 6).map(a => (
+              <div key={a.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#1f2937", borderRadius: 8, padding: "12px 14px", marginBottom: 8, flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ textAlign: "center", minWidth: 56 }}>
+                    <div style={{ fontWeight: 700, fontSize: 13 }}>{fmtDateShort(a.date)}</div>
+                    <div style={{ fontSize: 11, color: "#8b949e" }}>{a.time}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{a.patientname}</div>
+                    <div style={{ fontSize: 12, color: "#8b949e" }}>{a.dept}</div>
+                  </div>
+                </div>
+                <Badge status={a.status} />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  );
+            }
+function Patients({ patients, setPatients, appointments, bills, prescriptions, documents, setDocuments, isMobile, toast }) {
+  const [q, setQ] = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+  const [viewP, setViewP] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const blank = { name: "", age: "", gender: "Male", phone: "", email: "", blood: "O+", address: "" };
+  const [f, setF] = useState(blank);
+
+  const list = patients.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.id.includes(q) || (p.phone || "").includes(q));
+
+  const save = async () => {
+    if (!f.name || !f.phone) return;
+    setSaving(true);
+    const newP = { ...f, id: "P" + uid(), joined: todayStr() };
+    await supa.insert("patients", newP);
+    setPatients([newP, ...patients]);
+    setF(blank); setShowAdd(false); setSaving(false);
+    toast("Patient registered successfully!");
+  };
+
+  const remove = async (id) => {
+    await supa.delete("patients", id);
+    setPatients(patients.filter(x => x.id !== id));
+    toast("Patient removed");
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <div><h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Patient Records</h3><p style={{ fontSize: 12, color: "#8b949e", marginTop: 3 }}>{patients.length} registered</p></div>
+        <button style={S.btn()} onClick={() => setShowAdd(true)}>＋ New Patient</button>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 14px", marginBottom: 16 }}>
+        <span style={{ color: "#8b949e" }}>🔍</span>
+        <input style={{ ...S.input, border: "none", background: "transparent", padding: 0 }} placeholder="Search name, ID or phone…" value={q} onChange={e => setQ(e.target.value)} />
+      </div>
+      <ResponsiveTable isMobile={isMobile} emptyText="No patients found" onRowClick={p => setViewP(p)}
+        columns={[
+          { key: "id", label: "ID", render: p => <span style={{ color: "#00d9a3", fontWeight: 700 }}>{p.id}</span> },
+          { key: "name", label: "Patient", render: p => <div style={{ display: "flex", alignItems: "center", gap: 10 }}><Avt name={p.name} /><div><div style={{ fontWeight: 700 }}>{p.name}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{p.email}</div></div></div> },
+          { key: "age", label: "Age/Gender", render: p => `${p.age}y · ${p.gender}` },
+          { key: "phone", label: "Phone" },
+          { key: "blood", label: "Blood", render: p => <span style={S.badge("red")}>{p.blood}</span> },
+          { key: "joined", label: "Joined", render: p => <span style={{ color: "#8b949e" }}>{fmtDate(p.joined)}</span> },
+          { key: "actions", label: "", render: p => <button style={{ ...S.btn("danger"), padding: "5px 10px", fontSize: 12 }} onClick={e => { e.stopPropagation(); remove(p.id); }}>Remove</button> },
+        ]} rows={list} />
+
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Register New Patient">
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
+            <FG label="Full Name *"><input style={S.input} value={f.name} onChange={e => setF({ ...f, name: e.target.value })} placeholder="Patient name" /></FG>
+            <FG label="Age"><input style={S.input} type="number" value={f.age} onChange={e => setF({ ...f, age: e.target.value })} placeholder="Years" /></FG>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 14 }}>
+            <FG label="Gender"><select style={S.input} value={f.gender} onChange={e => setF({ ...f, gender: e.target.value })}>{["Male", "Female", "Other"].map(g => <option key={g}>{g}</option>)}</select></FG>
+            <FG label="Blood Group"><select style={S.input} value={f.blood} onChange={e => setF({ ...f, blood: e.target.value })}>{["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(b => <option key={b}>{b}</option>)}</select></FG>
+            <FG label="Phone *"><input style={S.input} value={f.phone} onChange={e => setF({ ...f, phone: e.target.value })} placeholder="Mobile no." /></FG>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
+            <FG label="Email"><input style={S.input} value={f.email} onChange={e => setF({ ...f, email: e.target.value })} placeholder="Email" /></FG>
+            <FG label="Address"><input style={S.input} value={f.address} onChange={e => setF({ ...f, address: e.target.value })} placeholder="Address" /></FG>
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 4 }}>
+            <button style={S.btn("secondary")} onClick={() => setShowAdd(false)}>Cancel</button>
+            <button style={{ ...S.btn(), opacity: saving ? 0.7 : 1 }} onClick={save} disabled={saving}>{saving ? "Saving…" : "Register Patient"}</button>
+          </div>
+        </div>
+      </Modal>
+      <PatientProfileModal patient={viewP} onClose={() => setViewP(null)} appointments={appointments} bills={bills} prescriptions={prescriptions} documents={documents} setDocuments={setDocuments} isMobile={isMobile} />
+    </div>
+  );
+}
+
+function PatientProfileModal({ patient, onClose, appointments, bills, prescriptions, documents, setDocuments, isMobile }) {
+  const [tab, setTab] = useState("overview");
+  const [docForm, setDocForm] = useState({ name: "", type: "Report", date: todayStr() });
+  useEffect(() => { if (patient) setTab("overview"); }, [patient]);
+  if (!patient) return null;
+
+  const patAppts = appointments.filter(a => a.patientid === patient.id).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+  const patBills = bills.filter(b => b.patientid === patient.id).sort((a, b) => b.date.localeCompare(a.date));
+  const patPrescriptions = prescriptions.filter(p => p.patientid === patient.id).sort((a, b) => b.date.localeCompare(a.date));
+  const patDocs = (documents || []).filter(d => d.patientid === patient.id).sort((a, b) => b.date.localeCompare(a.date));
+
+  const totalVisits = patAppts.filter(a => a.status === "Completed").length;
+  const totalSpent = patBills.reduce((s, b) => s + (b.paid || 0), 0);
+  const lastVisit = patAppts.find(a => a.status === "Completed");
+
+  const addDoc = async () => {
+    if (!docForm.name) return;
+    const doc = { id: "DOC" + uid(), patientid: patient.id, ...docForm };
+    await supa.insert("documents", doc);
+    setDocuments([doc, ...(documents || [])]);
+    setDocForm({ name: "", type: "Report", date: todayStr() });
+  };
+
+  const tabs = [["overview", "Overview"], ["history", "History"], ["prescriptions", "Prescriptions"], ["documents", "Documents"]];
+
+  return (
+    <Modal open={!!patient} onClose={onClose} title="Patient Profile" wide>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 18, flexWrap: "wrap" }}>
+        <div style={{ ...S.avatar(patient.name), width: 56, height: 56, fontSize: 20 }}>{patient.name.split(" ").map(w => w[0]).join("")}</div>
+        <div>
+          <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 18, fontWeight: 700 }}>{patient.name}</div>
+          <div style={{ fontSize: 12, color: "#8b949e" }}>{patient.id} · Joined {fmtDate(patient.joined)}</div>
+        </div>
+        <span style={{ ...S.badge("red"), marginLeft: isMobile ? 0 : "auto" }}>{patient.blood}</span>
+      </div>
+      <div style={{ display: "flex", gap: 4, background: "#1f2937", borderRadius: 8, padding: 4, width: "fit-content", marginBottom: 18, flexWrap: "wrap" }}>
+        {tabs.map(([v, l]) => <div key={v} onClick={() => setTab(v)} style={S.tab(tab === v)}>{l}</div>)}
+      </div>
+
+      {tab === "overview" && (
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 10, marginBottom: 16 }}>
+            {[{ label: "Total Visits", val: totalVisits, icon: "🏥" }, { label: "Total Spent", val: fmtCur(totalSpent), icon: "💰" }, { label: "Last Visit", val: lastVisit ? fmtDateShort(lastVisit.date) : "—", icon: "🗓️" }, { label: "Prescriptions", val: patPrescriptions.length, icon: "💊" }].map(s => (
+              <div key={s.label} style={{ background: "#1f2937", borderRadius: 8, padding: 12 }}>
+                <div style={{ fontSize: 18, marginBottom: 4 }}>{s.icon}</div>
+                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: isMobile ? 15 : 18 }}>{s.val}</div>
+                <div style={{ fontSize: 11, color: "#8b949e", marginTop: 2 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {[["Age", patient.age + " years"], ["Gender", patient.gender], ["Phone", patient.phone], ["Email", patient.email || "—"], ["Address", patient.address || "—"], ["Blood Group", patient.blood]].map(([k, v]) => (
+              <div key={k} style={{ background: "#1f2937", borderRadius: 8, padding: 14 }}>
+                <div style={{ fontSize: 11, color: "#8b949e", marginBottom: 4 }}>{k}</div>
+                <div style={{ fontWeight: 600 }}>{v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "history" && (
+        <div>
+          <h4 style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, margin: "0 0 10px", color: "#8b949e", textTransform: "uppercase" }}>Appointments ({patAppts.length})</h4>
+          {patAppts.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13 }}>No appointments yet</div> :
+            patAppts.map(a => (
+              <div key={a.id} style={{ background: "#1f2937", borderRadius: 8, padding: "10px 14px", marginBottom: 6, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6 }}>
+                <div><div style={{ fontWeight: 700, fontSize: 13 }}>{a.doctorname} · {a.dept}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{fmtDate(a.date)} at {fmtTime12(a.time)}</div></div>
+                <Badge status={a.status} />
+              </div>
+            ))}
+          <h4 style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, margin: "18px 0 10px", color: "#8b949e", textTransform: "uppercase" }}>Invoices ({patBills.length})</h4>
+          {patBills.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13 }}>No invoices yet</div> :
+            patBills.map(b => {
+              const items = b.items || [];
+              const { total } = calcBill(items, b.discount);
+              return (
+                <div key={b.id} style={{ background: "#1f2937", borderRadius: 8, padding: "10px 14px", marginBottom: 6, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6 }}>
+                  <div><div style={{ fontWeight: 700, fontSize: 13, color: "#00d9a3" }}>{b.id}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{fmtDate(b.date)} · {fmtCur(total)} total</div></div>
+                  <Badge status={b.status} />
+                </div>
+              );
+            })}
+        </div>
+      )}
+
+      {tab === "prescriptions" && (
+        <div>
+          {patPrescriptions.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13 }}>No prescriptions</div> :
+            patPrescriptions.map(p => (
+              <div key={p.id} style={{ background: "#1f2937", borderRadius: 8, padding: 14, marginBottom: 10 }}>
+                <div style={{ fontWeight: 700 }}>{p.diagnosis}</div>
+                <div style={{ fontSize: 11, color: "#8b949e" }}>{fmtDate(p.date)} · {p.doctorname}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
+                  {(p.medicines || []).map((m, i) => <span key={i} style={{ background: "#161b22", border: "1px solid #2d3748", borderRadius: 6, padding: "4px 8px", fontSize: 12 }}>{m.name}{m.dosage && ` · ${m.dosage}`}{m.frequency && ` · ${m.frequency}`}</span>)}
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+
+      {tab === "documents" && (
+        <div>
+          <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+            <input style={{ ...S.input, flex: 2, minWidth: 140 }} placeholder="Document name" value={docForm.name} onChange={e => setDocForm({ ...docForm, name: e.target.value })} />
+            <select style={{ ...S.input, flex: 1, minWidth: 120 }} value={docForm.type} onChange={e => setDocForm({ ...docForm, type: e.target.value })}>{DOC_TYPES.map(t => <option key={t}>{t}</option>)}</select>
+            <input style={{ ...S.input, flex: 1, minWidth: 120 }} type="date" value={docForm.date} onChange={e => setDocForm({ ...docForm, date: e.target.value })} />
+            <button style={S.btn()} onClick={addDoc}>＋ Attach</button>
+          </div>
+          {patDocs.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13 }}>No documents</div> :
+            patDocs.map(d => (
+              <div key={d.id} style={{ background: "#1f2937", borderRadius: 8, padding: "10px 14px", marginBottom: 6, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontSize: 18 }}>📄</span>
+                  <div><div style={{ fontWeight: 700, fontSize: 13 }}>{d.name}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{d.type} · {fmtDate(d.date)}</div></div>
+                </div>
+                <button style={{ ...S.btn("danger"), padding: "5px 10px", fontSize: 11 }} onClick={async () => { await supa.delete("documents", d.id); setDocuments((documents || []).filter(x => x.id !== d.id)); }}>Remove</button>
+              </div>
+            ))}
+        </div>
+      )}
+    </Modal>
+  );
+       function Appointments({ appointments, setAppointments, patients, addNotification, isMobile, toast }) {
+  const [tab, setTab] = useState("all");
+  const [q, setQ] = useState("");
+  const [deptFilter, setDeptFilter] = useState("all");
+  const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const blank = { patientId: "", doctorId: "", date: todayStr(), time: "", notes: "" };
+  const [f, setF] = useState(blank);
+
+  const selDoc = DOCTORS.find(d => d.id === f.doctorId);
+  const availableSlots = selDoc ? selDoc.slots.filter(s => !isSlotTaken(appointments, f.doctorId, f.date, s)) : [];
+
+  const filtered = appointments.filter(a => {
+    if (tab !== "all" && a.status.toLowerCase().replace(" ", "") !== tab.replace(" ", "")) return false;
+    if (deptFilter !== "all" && a.dept !== deptFilter) return false;
+    if (q) { const ql = q.toLowerCase(); if (!(a.patientname || "").toLowerCase().includes(ql) && !(a.doctorname || "").toLowerCase().includes(ql) && !a.id.toLowerCase().includes(ql)) return false; }
+    return true;
+  }).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+
+  const depts = [...new Set(DOCTORS.map(d => d.dept))];
+
+  const book = async () => {
+    if (!f.patientId || !f.doctorId || !f.date || !f.time) { setError("Sab fields fill karo"); return; }
+    if (isSlotTaken(appointments, f.doctorId, f.date, f.time)) { setError("Ye slot already booked hai"); return; }
+    setSaving(true);
+    const pat = patients.find(p => p.id === f.patientId);
+    const doc = DOCTORS.find(d => d.id === f.doctorId);
+    const appt = { id: "A" + uid(), patientid: pat.id, patientname: pat.name, doctorid: doc.id, doctorname: doc.name, dept: doc.dept, date: f.date, time: f.time, status: "Confirmed", fee: doc.fee, notes: f.notes };
+    await supa.insert("appointments", appt);
+    setAppointments([appt, ...appointments]);
+    addNotification({ type: "booking", text: `New appointment booked for ${pat.name} with ${doc.name}` });
+    setF(blank); setShow(false); setError(""); setSaving(false);
+    toast("Appointment booked!");
+  };
+
+  const updateStatus = async (id, status) => {
+    await supa.update("appointments", id, { status });
+    setAppointments(appointments.map(a => a.id === id ? { ...a, status } : a));
+    toast("Status updated");
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <div><h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Appointments</h3><p style={{ fontSize: 12, color: "#8b949e", marginTop: 3 }}>{appointments.length} total</p></div>
+        <button style={S.btn()} onClick={() => setShow(true)}>＋ Book Appointment</button>
+      </div>
+      <div style={{ display: "flex", gap: 4, background: "#1f2937", borderRadius: 8, padding: 4, width: "fit-content", marginBottom: 16, flexWrap: "wrap" }}>
+        {[["all", "All"], ["pending", "Pending"], ["confirmed", "Confirmed"], ["completed", "Completed"], ["cancelled", "Cancelled"]].map(([v, l]) => (
+          <div key={v} onClick={() => setTab(v)} style={S.tab(tab === v)}>{l}</div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 14px", flex: 2, minWidth: 200 }}>
+          <span style={{ color: "#8b949e" }}>🔍</span>
+          <input style={{ ...S.input, border: "none", background: "transparent", padding: 0 }} placeholder="Search patient, doctor…" value={q} onChange={e => setQ(e.target.value)} />
+        </div>
+        <select style={{ ...S.input, flex: 1, minWidth: 160 }} value={deptFilter} onChange={e => setDeptFilter(e.target.value)}>
+          <option value="all">All Departments</option>
+          {depts.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
+      </div>
+      <ResponsiveTable isMobile={isMobile} emptyText="No appointments found"
+        columns={[
+          { key: "id", label: "ID", render: a => <span style={{ color: "#00d9a3", fontWeight: 700 }}>{a.id}</span> },
+          { key: "patientname", label: "Patient", render: a => <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Avt name={a.patientname} /><span style={{ fontWeight: 600 }}>{a.patientname}</span></div> },
+          { key: "doctorname", label: "Doctor", render: a => <div><div style={{ fontWeight: 600 }}>{a.doctorname}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{a.dept}</div></div> },
+          { key: "date", label: "Date & Time", render: a => <div><div style={{ fontWeight: 600 }}>{fmtDate(a.date)}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{fmtTime12(a.time)}</div></div> },
+          { key: "fee", label: "Fee", render: a => <span style={{ color: "#00d9a3", fontWeight: 700 }}>{fmtCur(a.fee)}</span> },
+          { key: "status", label: "Status", render: a => <Badge status={a.status} /> },
+          {
+            key: "actions", label: "Actions", render: a => (
+              <select style={{ ...S.input, width: 130, padding: "5px 8px", fontSize: 12 }} value={a.status} onChange={e => updateStatus(a.id, e.target.value)}>
+                {["Pending", "Confirmed", "In Progress", "Completed", "Cancelled", "No Show"].map(s => <option key={s}>{s}</option>)}
+              </select>
+            )
+          },
+        ]} rows={filtered} />
+      <Modal open={show} onClose={() => setShow(false)} title="Book Appointment">
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <FG label="Patient *">
+            <select style={S.input} value={f.patientId} onChange={e => setF({ ...f, patientId: e.target.value })}>
+              <option value="">-- Select Patient --</option>
+              {patients.map(p => <option key={p.id} value={p.id}>{p.name} ({p.id})</option>)}
+            </select>
+          </FG>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
+            <FG label="Doctor *">
+              <select style={S.input} value={f.doctorId} onChange={e => setF({ ...f, doctorId: e.target.value, time: "" })}>
+                <option value="">-- Select Doctor --</option>
+                {DOCTORS.map(d => <option key={d.id} value={d.id}>{d.name} · {d.dept}</option>)}
+              </select>
+            </FG>
+            <FG label="Date *"><input style={S.input} type="date" value={f.date} onChange={e => setF({ ...f, date: e.target.value, time: "" })} /></FG>
+          </div>
+          <FG label="Time Slot *">
+            <select style={S.input} value={f.time} onChange={e => setF({ ...f, time: e.target.value })}>
+              <option value="">-- Pick slot --</option>
+              {availableSlots.map(s => <option key={s} value={s}>{fmtTime12(s)}</option>)}
+              {selDoc && availableSlots.length === 0 && <option disabled>No slots available</option>}
+            </select>
+          </FG>
+          <FG label="Notes"><textarea style={{ ...S.input, minHeight: 70, resize: "vertical" }} value={f.notes} onChange={e => setF({ ...f, notes: e.target.value })} placeholder="Reason for visit…" /></FG>
+          {error && <div style={{ color: "#f43f5e", fontSize: 13 }}>{error}</div>}
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+            <button style={S.btn("secondary")} onClick={() => setShow(false)}>Cancel</button>
+            <button style={{ ...S.btn(), opacity: saving ? 0.7 : 1 }} onClick={book} disabled={saving}>{saving ? "Booking…" : "Book Appointment"}</button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+function CalendarView({ appointments, isMobile }) {
+  const [view, setView] = useState("monthly");
+  const [ref, setRef] = useState(todayStr());
+  const apptsOn = (date) => appointments.filter(a => a.date === date).sort((a, b) => a.time.localeCompare(b.time));
+  const navigate = (dir) => {
+    if (view === "daily") setRef(addDays(ref, dir));
+    else if (view === "weekly") setRef(addDays(ref, dir * 7));
+    else { const d = new Date(ref); d.setMonth(d.getMonth() + dir); setRef(d.toISOString().split("T")[0]); }
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Appointment Calendar</h3>
+        <div style={{ display: "flex", gap: 4, background: "#1f2937", borderRadius: 8, padding: 4 }}>
+          {[["daily", "Day"], ["weekly", "Week"], ["monthly", "Month"]].map(([v, l]) => <div key={v} onClick={() => setView(v)} style={S.tab(view === v)}>{l}</div>)}
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button style={S.btn("secondary")} onClick={() => navigate(-1)}>← Prev</button>
+          <button style={S.btn("secondary")} onClick={() => setRef(todayStr())}>Today</button>
+          <button style={S.btn("secondary")} onClick={() => navigate(1)}>Next →</button>
+        </div>
+        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16 }}>
+          {view === "daily" && fmtDate(ref)}{view === "weekly" && `Week of ${fmtDate(startOfWeek(ref))}`}{view === "monthly" && monthLabel(ref)}
+        </div>
+      </div>
+      {view === "monthly" && (() => {
+        const cells = daysInMonthGrid(ref);
+        return (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: isMobile ? 2 : 6, marginBottom: 6 }}>
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(w => <div key={w} style={{ textAlign: "center", fontSize: 11, color: "#8b949e", fontWeight: 700, textTransform: "uppercase" }}>{isMobile ? w[0] : w}</div>)}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: isMobile ? 2 : 6 }}>
+              {cells.map(d => {
+                const appts = apptsOn(d); const isToday = d === todayStr(); const inMonth = isSameMonth(d, ref);
+                return (
+                  <div key={d} onClick={() => { setRef(d); setView("daily"); }} style={{ ...S.card(), padding: isMobile ? 6 : 10, minHeight: isMobile ? 56 : 80, cursor: "pointer", opacity: inMonth ? 1 : 0.35, border: isToday ? "1px solid rgba(0,217,163,.5)" : "1px solid #2d3748" }}>
+                    <div style={{ fontSize: isMobile ? 11 : 13, fontWeight: isToday ? 800 : 600, color: isToday ? "#00d9a3" : "#e6edf3" }}>{new Date(d).getDate()}</div>
+                    {!isMobile && appts.slice(0, 2).map(a => <div key={a.id} style={{ fontSize: 10, background: "rgba(0,217,163,.1)", color: "#00d9a3", borderRadius: 4, padding: "2px 4px", marginTop: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.time} {a.patientname}</div>)}
+                    {appts.length > 0 && <div style={{ fontSize: 9, color: "#00d9a3", fontWeight: 700, marginTop: 2 }}>{appts.length}●</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
+      {view === "daily" && (
+        <div style={{ ...S.card(), padding: 20 }}>
+          <h4 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 14px" }}>{fmtDate(ref)}</h4>
+          {apptsOn(ref).length === 0 ? <div style={{ textAlign: "center", padding: "32px 0", color: "#8b949e" }}>No appointments</div> :
+            apptsOn(ref).map(a => (
+              <div key={a.id} style={{ background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 10px", marginBottom: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ fontWeight: 700, color: "#00d9a3" }}>{fmtTime12(a.time)}</span><Badge status={a.status} /></div>
+                <div style={{ fontWeight: 600, marginTop: 2 }}>{a.patientname}</div>
+                <div style={{ fontSize: 11, color: "#8b949e" }}>{a.doctorname} · {a.dept}</div>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+     }
+   function Billing({ bills, setBills, patients, addNotification, isMobile, toast }) {
+  const [show, setShow] = useState(false);
+  const [viewBill, setViewBill] = useState(null);
+  const [tab, setTab] = useState("all");
+  const [q, setQ] = useState("");
+  const [saving, setSaving] = useState(false);
+  const blank = { patientId: "", doctorId: DOCTORS[0].id, items: [], discount: 0, paid: 0, paymentMode: "Cash" };
+  const [f, setF] = useState(blank);
+  const [payInput, setPayInput] = useState({});
+  const [payMode, setPayMode] = useState({});
+
+  const filtered = bills.filter(b => {
+    if (tab !== "all" && b.status.toLowerCase() !== tab) return false;
+    if (q) { const ql = q.toLowerCase(); if (!(b.patientname || "").toLowerCase().includes(ql) && !b.id.toLowerCase().includes(ql)) return false; }
+    return true;
+  });
+
+  const addItem = (svc) => {
+    const exists = f.items.find(i => i.name === svc.name);
+    if (exists) setF({ ...f, items: f.items.map(i => i.name === svc.name ? { ...i, qty: i.qty + 1 } : i) });
+    else setF({ ...f, items: [...f.items, { name: svc.name, price: svc.price, gst: svc.gst, qty: 1 }] });
+  };
+
+  const save = async () => {
+    if (!f.patientId || f.items.length === 0) return;
+    setSaving(true);
+    const pat = patients.find(p => p.id === f.patientId);
+    const doc = DOCTORS.find(d => d.id === f.doctorId);
+    const { total } = calcBill(f.items, f.discount);
+    const paid = Math.min(Number(f.paid) || 0, total);
+    const status = paid >= total ? "Paid" : paid > 0 ? "Partial" : "Pending";
+    const paymentHistory = paid > 0 ? [{ amount: paid, mode: f.paymentMode, date: todayStr() }] : [];
+    const bill = { id: "INV-" + uid(), patientid: pat.id, patientname: pat.name, doctorname: doc.name, date: todayStr(), items: f.items, discount: Number(f.discount) || 0, paid, status, paymenthistory: paymentHistory };
+    await supa.insert("bills", bill);
+    setBills([bill, ...bills]);
+    if (status !== "Paid") addNotification({ type: "payment", text: `Pending payment of ${fmtCur(total - paid)} from ${pat.name}` });
+    setF(blank); setShow(false); setSaving(false);
+    toast("Invoice generated!");
+  };
+
+  const recordPayment = async (id, amt, mode) => {
+    const amount = Number(amt);
+    if (!amount || amount <= 0) return;
+    const bill = bills.find(b => b.id === id);
+    const { total } = calcBill(bill.items || [], bill.discount);
+    const newPaid = Math.min((bill.paid || 0) + amount, total);
+    const status = newPaid >= total ? "Paid" : newPaid > 0 ? "Partial" : "Pending";
+    const paymenthistory = [...(bill.paymenthistory || []), { amount, mode: mode || "Cash", date: todayStr() }];
+    await supa.update("bills", id, { paid: newPaid, status, paymenthistory });
+    setBills(bills.map(b => b.id === id ? { ...b, paid: newPaid, status, paymenthistory } : b));
+    setPayInput({ ...payInput, [id]: "" });
+    toast("Payment recorded!");
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <div><h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Billing & Invoices</h3><p style={{ fontSize: 12, color: "#8b949e", marginTop: 3 }}>{bills.length} invoices</p></div>
+        <button style={S.btn()} onClick={() => setShow(true)}>＋ New Invoice</button>
+      </div>
+      <div style={{ display: "flex", gap: 4, background: "#1f2937", borderRadius: 8, padding: 4, width: "fit-content", marginBottom: 16, flexWrap: "wrap" }}>
+        {[["all", "All"], ["paid", "Paid"], ["pending", "Pending"], ["partial", "Partial"]].map(([v, l]) => (
+          <div key={v} onClick={() => setTab(v)} style={S.tab(tab === v)}>{l}</div>
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 14px", marginBottom: 16 }}>
+        <span style={{ color: "#8b949e" }}>🔍</span>
+        <input style={{ ...S.input, border: "none", background: "transparent", padding: 0 }} placeholder="Search invoice or patient…" value={q} onChange={e => setQ(e.target.value)} />
+      </div>
+      <ResponsiveTable isMobile={isMobile} emptyText="No invoices"
+        columns={[
+          { key: "id", label: "Invoice", render: b => <span style={{ color: "#00d9a3", fontWeight: 700, cursor: "pointer" }} onClick={() => setViewBill(b)}>{b.id}</span> },
+          { key: "patientname", label: "Patient" },
+          { key: "doctorname", label: "Doctor", render: b => b.doctorname || "—" },
+          { key: "date", label: "Date", render: b => fmtDate(b.date) },
+          { key: "total", label: "Total", render: b => <span style={{ fontWeight: 700 }}>{fmtCur(calcBill(b.items || [], b.discount).total)}</span> },
+          { key: "paid", label: "Paid", render: b => <span style={{ color: "#00d9a3" }}>{fmtCur(b.paid)}</span> },
+          { key: "status", label: "Status", render: b => <Badge status={b.status} /> },
+          {
+            key: "actions", label: "Actions", render: b => (
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
+                <button style={{ ...S.btn("secondary"), padding: "5px 10px", fontSize: 11 }} onClick={() => setViewBill(b)}>View</button>
+                {b.status !== "Paid" && (<>
+                  <input style={{ ...S.input, width: 80, padding: "5px 8px", fontSize: 12 }} placeholder="₹" value={payInput[b.id] || ""} onChange={e => setPayInput({ ...payInput, [b.id]: e.target.value })} />
+                  <select style={{ ...S.input, width: 80, padding: "5px 8px", fontSize: 12 }} value={payMode[b.id] || "Cash"} onChange={e => setPayMode({ ...payMode, [b.id]: e.target.value })}>{PAYMENT_MODES.map(m => <option key={m}>{m}</option>)}</select>
+                  <button style={{ ...S.btn("green"), padding: "5px 10px", fontSize: 11 }} onClick={() => recordPayment(b.id, payInput[b.id] || 0, payMode[b.id] || "Cash")}>Pay</button>
+                </>)}
+              </div>
+            )
+          },
+        ]} rows={filtered} />
+      <Modal open={show} onClose={() => setShow(false)} title="Create Invoice" wide>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+              <FG label="Patient *">
+                <select style={S.input} value={f.patientId} onChange={e => setF({ ...f, patientId: e.target.value })}>
+                  <option value="">-- Patient --</option>
+                  {patients.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+              </FG>
+              <FG label="Doctor">
+                <select style={S.input} value={f.doctorId} onChange={e => setF({ ...f, doctorId: e.target.value })}>
+                  {DOCTORS.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                </select>
+              </FG>
+            </div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#8b949e", textTransform: "uppercase", marginBottom: 8 }}>Add Services</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+              {SERVICES.map(svc => (
+                <button key={svc.id} onClick={() => addItem(svc)} style={{ background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 10px", cursor: "pointer", textAlign: "left", color: "#e6edf3" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600 }}>{svc.name}</div>
+                  <div style={{ fontSize: 11, color: "#00d9a3" }}>{fmtCur(svc.price)}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#8b949e", textTransform: "uppercase", marginBottom: 8 }}>Invoice Items</div>
+            {f.items.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13, padding: "20px 0" }}>No items yet</div> :
+              f.items.map(item => (
+                <div key={item.name} style={{ background: "#1f2937", borderRadius: 8, padding: "10px 12px", marginBottom: 6, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div><div style={{ fontWeight: 600, fontSize: 13 }}>{item.name}</div><div style={{ fontSize: 11, color: "#8b949e" }}>x{item.qty} · GST {item.gst}%</div></div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontWeight: 700 }}>{fmtCur(item.price * item.qty * (1 + item.gst / 100))}</div>
+                    <button style={{ fontSize: 11, color: "#f43f5e", background: "none", border: "none", cursor: "pointer" }} onClick={() => setF({ ...f, items: f.items.filter(i => i.name !== item.name) })}>remove</button>
+                  </div>
+                </div>
+              ))}
+            {f.items.length > 0 && (() => { const { sub, tax, total } = calcBill(f.items, f.discount); return (<div style={{ background: "rgba(0,217,163,.06)", border: "1px solid rgba(0,217,163,.15)", borderRadius: 8, padding: 14, marginTop: 8 }}>{[["Subtotal", fmtCur(sub)], ["GST", fmtCur(tax)], ["Discount", "- " + fmtCur(f.discount || 0)], ["Total", fmtCur(total)]].map(([k, v], i) => (<div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "3px 0", fontWeight: i === 3 ? 800 : 400, color: i === 3 ? "#00d9a3" : "#e6edf3" }}><span>{k}</span><span>{v}</span></div>))}</div>); })()}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 12 }}>
+              <FG label="Discount (₹)"><input style={S.input} type="number" value={f.discount} onChange={e => setF({ ...f, discount: e.target.value })} /></FG>
+              <FG label="Paid Now (₹)"><input style={S.input} type="number" value={f.paid} onChange={e => setF({ ...f, paid: e.target.value })} /></FG>
+            </div>
+            <FG label="Payment Mode"><select style={S.input} value={f.paymentMode} onChange={e => setF({ ...f, paymentMode: e.target.value })}>{PAYMENT_MODES.map(m => <option key={m}>{m}</option>)}</select></FG>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 14 }}>
+              <button style={S.btn("secondary")} onClick={() => setShow(false)}>Cancel</button>
+              <button style={{ ...S.btn(), opacity: saving ? 0.7 : 1 }} onClick={save} disabled={saving}>{saving ? "Saving…" : "Generate Invoice"}</button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      <Modal open={!!viewBill} onClose={() => setViewBill(null)} title="Invoice Details" wide>
+        {viewBill && (() => {
+          const items = viewBill.items || [];
+          const { sub, tax, total } = calcBill(items, viewBill.discount);
+          const bal = total - (viewBill.paid || 0);
+          return (
+            <div>
+              <div id="invoice-print" style={{ background: "#fff", color: "#111", borderRadius: 12, padding: 32 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28, paddingBottom: 20, borderBottom: "2px solid #e5e7eb", flexWrap: "wrap", gap: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 10, background: "#059669", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>🏥</div>
+                    <div>
+                      <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 26, fontWeight: 800, color: "#059669" }}>MedCare Clinic</div>
+                      <div style={{ fontSize: 12, color: "#6b7280", marginTop: 4 }}>General & Multi-specialty Hospital<br />123, Health Avenue, New Delhi<br />GSTIN: 07AABCC1234Z1Z5</div>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: "#1f2937" }}>{viewBill.id}</div>
+                    <div style={{ fontSize: 13, color: "#6b7280" }}>Date: {fmtDate(viewBill.date)}</div>
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+                  <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>BILL TO</div><div style={{ fontWeight: 700 }}>{viewBill.patientname}</div></div>
+                  <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>DOCTOR</div><div style={{ fontWeight: 700 }}>{viewBill.doctorname || "—"}</div></div>
+                </div>
+                <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20 }}>
+                  <thead><tr style={{ background: "#f3f4f6" }}>{["Service", "Qty", "Rate", "GST%", "Amount"].map(h => <th key={h} style={{ padding: "10px 12px", textAlign: "left", fontSize: 12, fontWeight: 700, color: "#374151" }}>{h}</th>)}</tr></thead>
+                  <tbody>{items.map(item => (<tr key={item.name} style={{ borderBottom: "1px solid #e5e7eb" }}><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.name}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.qty}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{fmtCur(item.price)}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.gst}%</td><td style={{ padding: "10px 12px", fontSize: 13, fontWeight: 600 }}>{fmtCur(item.price * item.qty * (1 + item.gst / 100))}</td></tr>))}</tbody>
+                </table>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <div style={{ minWidth: 240 }}>
+                    {[["Subtotal", fmtCur(sub)], ["GST", fmtCur(tax)], ["Discount", "- " + fmtCur(viewBill.discount || 0)]].map(([k, v]) => (<div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", fontSize: 13 }}><span>{k}</span><span>{v}</span></div>))}
+                    <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", fontSize: 17, fontWeight: 800, color: "#059669", borderTop: "2px solid #e5e7eb", marginTop: 4 }}><span>Total</span><span>{fmtCur(total)}</span></div>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span>Paid</span><span style={{ color: "#059669", fontWeight: 600 }}>{fmtCur(viewBill.paid || 0)}</span></div>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700, color: bal > 0 ? "#dc2626" : "#059669" }}><span>Balance Due</span><span>{fmtCur(bal)}</span></div>
+                  </div>
+                </div>
+                <div style={{ marginTop: 24, padding: 12, background: "#f9fafb", borderRadius: 8, fontSize: 12, color: "#6b7280", textAlign: "center" }}>Thank you for choosing MedCare Clinic. Get well soon! 🌿</div>
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 16 }}>
+                <button style={S.btn("secondary")} onClick={() => window.print()}>🖨️ Print</button>
+              </div>
+            </div>
+          );
+        })()}
+      </Modal>
+    </div>
+  );
+}
+
+function Prescriptions({ prescriptions, setPrescriptions, patients, addNotification, isMobile, toast }) {
+  const [show, setShow] = useState(false);
+  const [q, setQ] = useState("");
+  const [saving, setSaving] = useState(false);
+  const blankMed = { name: "", dosage: "", frequency: "", duration: "" };
+  const blank = { patientId: "", doctorId: DOCTORS[0].id, date: todayStr(), diagnosis: "", medicines: [{ ...blankMed }], instructions: "", followUpDate: "" };
+  const [f, setF] = useState(blank);
+
+  const filtered = prescriptions.filter(p => {
+    if (!q) return true;
+    const ql = q.toLowerCase();
+    return (p.patientname || "").toLowerCase().includes(ql) || (p.diagnosis || "").toLowerCase().includes(ql);
+  }).sort((a, b) => b.date.localeCompare(a.date));
+
+  const save = async () => {
+    if (!f.patientId || !f.diagnosis) return;
+    setSaving(true);
+    const pat = patients.find(p => p.id === f.patientId);
+    const doc = DOCTORS.find(d => d.id === f.doctorId);
+    const validMeds = f.medicines.filter(m => m.name.trim());
+    const rx = { id: "RX" + uid(), patientid: pat.id, patientname: pat.name, doctorid: doc.id, doctorname: doc.name, date: f.date, diagnosis: f.diagnosis, medicines: validMeds, instructions: f.instructions, followupdate: f.followUpDate };
+    await supa.insert("prescriptions", rx);
+    setPrescriptions([rx, ...prescriptions]);
+    if (f.followUpDate) addNotification({ type: "followup", text: `Follow-up for ${pat.name} on ${fmtDate(f.followUpDate)}` });
+    setF(blank); setShow(false); setSaving(false);
+    toast("Prescription saved!");
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <div><h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Prescriptions</h3><p style={{ fontSize: 12, color: "#8b949e", marginTop: 3 }}>{prescriptions.length} on record</p></div>
+        <button style={S.btn()} onClick={() => setShow(true)}>＋ New Prescription</button>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 14px", marginBottom: 16 }}>
+        <span style={{ color: "#8b949e" }}>🔍</span>
+        <input style={{ ...S.input, border: "none", background: "transparent", padding: 0 }} placeholder="Search patient or diagnosis…" value={q} onChange={e => setQ(e.target.value)} />
+      </div>
+      {filtered.length === 0 ? <div style={{ textAlign: "center", padding: "40px 0", color: "#8b949e" }}>No prescriptions found</div> :
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {filtered.map(p => (
+            <div key={p.id} style={{ ...S.card(), padding: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}><Avt name={p.patientname} /><div><div style={{ fontWeight: 700 }}>{p.patientname}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{p.doctorname} · {fmtDate(p.date)}</div></div></div>
+                {p.followupdate && <span style={S.badge("blue")}>Follow-up {fmtDateShort(p.followupdate)}</span>}
+              </div>
+              <div style={{ background: "#1f2937", borderRadius: 8, padding: 10, marginBottom: 8 }}>
+                <div style={{ fontSize: 11, color: "#8b949e", marginBottom: 2 }}>Diagnosis</div>
+                <div style={{ fontWeight: 600 }}>{p.diagnosis}</div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {(p.medicines || []).map((m, i) => <span key={i} style={{ background: "#1f2937", border: "1px solid #2d3748", borderRadius: 6, padding: "4px 8px", fontSize: 12 }}>{m.name}{m.dosage && ` · ${m.dosage}`}{m.frequency && ` · ${m.frequency}`}</span>)}
+              </div>
+            </div>
+          ))}
+        </div>}
+      <Modal open={show} onClose={() => setShow(false)} title="New Prescription" wide>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 14 }}>
+            <FG label="Patient *"><select style={S.input} value={f.patientId} onChange={e => setF({ ...f, patientId: e.target.value })}><option value="">-- Select --</option>{pat
