@@ -167,7 +167,7 @@ function Toast({ message, onClose }) {
       ✓ {message}
     </div>
   );
-         }
+}
 function ResponsiveTable({ columns, rows, emptyText, isMobile, onRowClick, keyField = "id" }) {
   if (isMobile) {
     return (
@@ -373,7 +373,7 @@ function Dashboard({ patients, appointments, bills, prescriptions, isMobile }) {
       </div>
     </div>
   );
-            }
+    }
 function Patients({ patients, setPatients, appointments, bills, prescriptions, documents, setDocuments, isMobile, toast }) {
   const [q, setQ] = useState("");
   const [showAdd, setShowAdd] = useState(false);
@@ -570,7 +570,8 @@ function PatientProfileModal({ patient, onClose, appointments, bills, prescripti
       )}
     </Modal>
   );
-       function Appointments({ appointments, setAppointments, patients, addNotification, isMobile, toast }) {
+      }
+function Appointments({ appointments, setAppointments, patients, addNotification, isMobile, toast }) {
   const [tab, setTab] = useState("all");
   const [q, setQ] = useState("");
   const [deptFilter, setDeptFilter] = useState("all");
@@ -750,8 +751,8 @@ function CalendarView({ appointments, isMobile }) {
       )}
     </div>
   );
-     }
-   function Billing({ bills, setBills, patients, addNotification, isMobile, toast }) {
+      }
+function Billing({ bills, setBills, patients, addNotification, isMobile, toast }) {
   const [show, setShow] = useState(false);
   const [viewBill, setViewBill] = useState(null);
   const [tab, setTab] = useState("all");
@@ -768,6 +769,11 @@ function CalendarView({ appointments, isMobile }) {
     return true;
   });
 
+  const addItem = (svc) => {
+    const exists = f.items.find(i => i.name === svc.name);
+    if (exists) setF({ ...f, items: f.items.map(i => i.name === svc.name ? { ...i, qty: i.qty + 1 } : i) });
+    else setF({ ...f, items: [...f.items, { name: svc.name, price: svc.price, gst: svc.gst, qty: 1 }] });
+  };
   const addItem = (svc) => {
     const exists = f.items.find(i => i.name === svc.name);
     if (exists) setF({ ...f, items: f.items.map(i => i.name === svc.name ? { ...i, qty: i.qty + 1 } : i) });
@@ -790,8 +796,7 @@ function CalendarView({ appointments, isMobile }) {
     setF(blank); setShow(false); setSaving(false);
     toast("Invoice generated!");
   };
-
-  const recordPayment = async (id, amt, mode) => {
+const recordPayment = async (id, amt, mode) => {
     const amount = Number(amt);
     if (!amount || amount <= 0) return;
     const bill = bills.find(b => b.id === id);
@@ -804,7 +809,6 @@ function CalendarView({ appointments, isMobile }) {
     setPayInput({ ...payInput, [id]: "" });
     toast("Payment recorded!");
   };
-
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
@@ -841,7 +845,7 @@ function CalendarView({ appointments, isMobile }) {
               </div>
             )
           },
-        ]} rows={filtered} />
+          ]} rows={filtered} />
       <Modal open={show} onClose={() => setShow(false)} title="Create Invoice" wide>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
           <div>
@@ -918,17 +922,6 @@ function CalendarView({ appointments, isMobile }) {
                   <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>BILL TO</div><div style={{ fontWeight: 700 }}>{viewBill.patientname}</div></div>
                   <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>DOCTOR</div><div style={{ fontWeight: 700 }}>{viewBill.doctorname || "—"}</div></div>
                 </div>
-                <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 20 }}>
-                  <thead><tr style={{ background: "#f3f4f6" }}>{["Service", "Qty", "Rate", "GST%", "Amount"].map(h => <th key={h} style={{ padding: "10px 12px", textAlign: "left", fontSize: 12, fontWeight: 700, color: "#374151" }}>{h}</th>)}</tr></thead>
-                  <tbody>{items.map(item => (<tr key={item.name} style={{ borderBottom: "1px solid #e5e7eb" }}><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.name}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.qty}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{fmtCur(item.price)}</td><td style={{ padding: "10px 12px", fontSize: 13 }}>{item.gst}%</td><td style={{ padding: "10px 12px", fontSize: 13, fontWeight: 600 }}>{fmtCur(item.price * item.qty * (1 + item.gst / 100))}</td></tr>))}</tbody>
-                </table>
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <div style={{ minWidth: 240 }}>
-                    {[["Subtotal", fmtCur(sub)], ["GST", fmtCur(tax)], ["Discount", "- " + fmtCur(viewBill.discount || 0)]].map(([k, v]) => (<div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", fontSize: 13 }}><span>{k}</span><span>{v}</span></div>))}
-                    <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", fontSize: 17, fontWeight: 800, color: "#059669", borderTop: "2px solid #e5e7eb", marginTop: 4 }}><span>Total</span><span>{fmtCur(total)}</span></div>
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span>Paid</span><span style={{ color: "#059669", fontWeight: 600 }}>{fmtCur(viewBill.paid || 0)}</span></div>
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700, color: bal > 0 ? "#dc2626" : "#059669" }}><span>Balance Due</span><span>{fmtCur(bal)}</span></div>
-                  </div>
                 </div>
                 <div style={{ marginTop: 24, padding: 12, background: "#f9fafb", borderRadius: 8, fontSize: 12, color: "#6b7280", textAlign: "center" }}>Thank you for choosing MedCare Clinic. Get well soon! 🌿</div>
               </div>
@@ -998,8 +991,420 @@ function Prescriptions({ prescriptions, setPrescriptions, patients, addNotificat
               </div>
             </div>
           ))}
-        </div>}
+          </div>}
       <Modal open={show} onClose={() => setShow(false)} title="New Prescription" wide>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 14 }}>
-            <FG label="Patient *"><select style={S.input} value={f.patientId} onChange={e => setF({ ...f, patientId: e.target.value })}><option value="">-- Select --</option>{pat
+            <FG label="Patient *"><select style={S.input} value={f.patientId} onChange={e => setF({ ...f, patientId: e.target.value })}><option value="">-- Select --</option>{patients.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></FG>
+            <FG label="Doctor"><select style={S.input} value={f.doctorId} onChange={e => setF({ ...f, doctorId: e.target.value })}>{DOCTORS.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></FG>
+            <FG label="Date"><input style={S.input} type="date" value={f.date} onChange={e => setF({ ...f, date: e.target.value })} /></FG>
+          </div>
+          <FG label="Diagnosis *"><input style={S.input} value={f.diagnosis} onChange={e => setF({ ...f, diagnosis: e.target.value })} placeholder="e.g. Acute viral fever" /></FG>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <label style={S.label}>Medicines</label>
+              <button style={{ ...S.btn("secondary"), padding: "5px 10px", fontSize: 11 }} onClick={() => setF({ ...f, medicines: [...f.medicines, { ...blankMed }] })}>＋ Add</button>
+            </div>
+            {f.medicines.map((m, i) => (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "2fr 1fr 1fr 1fr auto", gap: 8, marginBottom: 8 }}>
+                <input style={S.input} placeholder="Medicine name" value={m.name} onChange={e => setF({ ...f, medicines: f.medicines.map((x, idx) => idx === i ? { ...x, name: e.target.value } : x) })} />
+                <input style={S.input} placeholder="Dosage" value={m.dosage} onChange={e => setF({ ...f, medicines: f.medicines.map((x, idx) => idx === i ? { ...x, dosage: e.target.value } : x) })} />
+                <input style={S.input} placeholder="Frequency" value={m.frequency} onChange={e => setF({ ...f, medicines: f.medicines.map((x, idx) => idx === i ? { ...x, frequency: e.target.value } : x) })} />
+                <input style={S.input} placeholder="Duration" value={m.duration} onChange={e => setF({ ...f, medicines: f.medicines.map((x, idx) => idx === i ? { ...x, duration: e.target.value } : x) })} />
+                {f.medicines.length > 1 && <button style={{ ...S.btn("danger"), padding: "8px 10px" }} onClick={() => setF({ ...f, medicines: f.medicines.filter((_, idx) => idx !== i) })}>✕</button>}
+              </div>
+            ))}
+          </div>
+          <FG label="Instructions"><textarea style={{ ...S.input, minHeight: 70, resize: "vertical" }} value={f.instructions} onChange={e => setF({ ...f, instructions: e.target.value })} /></FG>
+          <FG label="Follow-up Date"><input style={S.input} type="date" value={f.followUpDate} onChange={e => setF({ ...f, followUpDate: e.target.value })} /></FG>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+            <button style={S.btn("secondary")} onClick={() => setShow(false)}>Cancel</button>
+            <button style={{ ...S.btn(), opacity: saving ? 0.7 : 1 }} onClick={save} disabled={saving}>{saving ? "Saving…" : "Save Prescription"}</button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+                }
+function FollowUps({ prescriptions, isMobile }) {
+  const today = todayStr();
+  const withFollowUp = prescriptions.filter(p => p.followupdate).sort((a, b) => a.followupdate.localeCompare(b.followupdate));
+  const due = withFollowUp.filter(p => p.followupdate <= today);
+  const upcoming = withFollowUp.filter(p => p.followupdate > today);
+  const Row = ({ p, overdue }) => (
+    <div style={{ ...S.card(), padding: 14, marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}><Avt name={p.patientname} /><div><div style={{ fontWeight: 700 }}>{p.patientname}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{p.diagnosis} · {p.doctorname}</div></div></div>
+      <div style={{ textAlign: "right" }}><div style={{ fontWeight: 700, color: overdue ? "#f43f5e" : "#00d9a3" }}>{fmtDate(p.followupdate)}</div><div style={{ fontSize: 11, color: "#8b949e" }}>{overdue ? "Overdue" : "Upcoming"}</div></div>
+    </div>
+  );
+  return (
+    <div>
+      <div style={{ marginBottom: 20 }}><h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Follow-up Management</h3><p style={{ fontSize: 12, color: "#8b949e", marginTop: 3 }}>{withFollowUp.length} scheduled</p></div>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3,1fr)", gap: 14, marginBottom: 24 }}>
+        {[{ label: "Overdue", val: due.length, icon: "⚠️", bar: "#f43f5e" }, { label: "Upcoming", val: upcoming.length, icon: "⏭️", bar: "#0ea5e9" }, { label: "Total", val: withFollowUp.length, icon: "🔁", bar: "#00d9a3" }].map(s => (
+          <div key={s.label} style={S.statCard()}><div style={S.statBar(s.bar)} /><div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div><div style={{ fontFamily: "'Syne',sans-serif", fontSize: 22, fontWeight: 800 }}>{s.val}</div><div style={{ fontSize: 12, color: "#8b949e", marginTop: 4 }}>{s.label}</div></div>
+        ))}
+      </div>
+      <h4 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 10px" }}>Due / Overdue</h4>
+      {due.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13, marginBottom: 18 }}>Nothing due</div> : due.map(p => <Row key={p.id} p={p} overdue />)}
+      <h4 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "18px 0 10px" }}>Upcoming</h4>
+      {upcoming.length === 0 ? <div style={{ color: "#8b949e", fontSize: 13 }}>None</div> : upcoming.map(p => <Row key={p.id} p={p} />)}
+    </div>
+  );
+}
+function Doctors({ appointments, isMobile }) {
+  const [q, setQ] = useState("");
+  const [deptFilter, setDeptFilter] = useState("all");
+  const depts = [...new Set(DOCTORS.map(d => d.dept))];
+  const filtered = DOCTORS.filter(d => {
+    if (deptFilter !== "all" && d.dept !== deptFilter) return false;
+    if (q && !(d.name.toLowerCase().includes(q.toLowerCase()) || d.dept.toLowerCase().includes(q.toLowerCase()))) return false;
+    return true;
+  });
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+        <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: 0 }}>Doctors & Staff</h3>
+      </div>
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#1f2937", border: "1px solid #2d3748", borderRadius: 8, padding: "8px 14px", flex: 2, minWidth: 200 }}>
+          <span style={{ color: "#8b949e" }}>🔍</span>
+          <input style={{ ...S.input, border: "none", background: "transparent", padding: 0 }} placeholder="Search doctors…" value={q} onChange={e => setQ(e.target.value)} />
+        </div>
+        <select style={{ ...S.input, flex: 1, minWidth: 160 }} value={deptFilter} onChange={e => setDeptFilter(e.target.value)}>
+          <option value="all">All Departments</option>
+          {depts.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 16 }}>
+        {filtered.map(d => {
+          const todayCount = appointments.filter(a => a.doctorid === d.id && a.date === todayStr()).length;
+          return (
+            <div key={d.id} style={{ ...S.card(), padding: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+                <div style={{ ...S.avatar(d.name), width: 52, height: 52, fontSize: 18 }}>{d.name.split(" ").map(w => w[0]).join("")}</div>
+                <div><div style={{ fontWeight: 700, fontSize: 15 }}>{d.name}</div><div style={{ fontSize: 12, color: "#8b949e" }}>{d.id}</div></div>
+              </div>
+              <div style={{ background: "#1f2937", borderRadius: 8, padding: 12, marginBottom: 12 }}>
+                <div style={{ fontSize: 11, color: "#8b949e", marginBottom: 2 }}>Department</div>
+                <div style={{ fontWeight: 600, color: "#0ea5e9" }}>{d.dept}</div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 12 }}>
+                {[["Fee", fmtCur(d.fee)], ["Slots", d.slots.length], ["Today", todayCount]].map(([k, v]) => (
+                  <div key={k} style={{ background: "#1f2937", borderRadius: 8, padding: 10 }}>
+                    <div style={{ fontSize: 10, color: "#8b949e" }}>{k}</div>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: k === "Today" ? "#f59e0b" : k === "Fee" ? "#00d9a3" : "#e6edf3" }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {d.slots.map(s => <span key={s} style={{ background: "rgba(0,217,163,.1)", color: "#00d9a3", borderRadius: 4, padding: "2px 7px", fontSize: 11, fontWeight: 600 }}>{fmtTime12(s)}</span>)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+function Reports({ patients, appointments, bills, isMobile }) {
+  const totalRevenue = bills.reduce((s, b) => s + (b.paid || 0), 0);
+  const totalDue = bills.reduce((s, b) => { const { total } = calcBill(b.items || [], b.discount); return s + (total - (b.paid || 0)); }, 0);
+  const paidBills = bills.filter(b => b.status === "Paid").length;
+  const deptMap = {};
+  appointments.forEach(a => { deptMap[a.dept] = (deptMap[a.dept] || 0) + 1; });
+  const deptArr = Object.entries(deptMap).sort((a, b) => b[1] - a[1]);
+  const totalAppts = appointments.length;
+  const completedAppts = appointments.filter(a => a.status === "Completed").length;
+  const cards = [
+    { label: "Total Revenue", val: fmtCur(totalRevenue), icon: "💰", col: "#00d9a3" },
+    { label: "Outstanding Dues", val: fmtCur(totalDue), icon: "⏳", col: "#f43f5e" },
+    { label: "Invoice Collection", val: paidBills + "/" + bills.length, icon: "📊", col: "#0ea5e9" },
+    { label: "Appointments Done", val: `${completedAppts}/${totalAppts}`, icon: "✅", col: "#f59e0b" },
+  ];
+  return (
+    <div>
+      <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, margin: "0 0 20px" }}>Reports & Analytics</h3>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 14, marginBottom: 24 }}>
+        {cards.map(c => (<div key={c.label} style={{ ...S.card(), padding: 18, borderTop: `3px solid ${c.col}` }}><div style={{ fontSize: 24, marginBottom: 8 }}>{c.icon}</div><div style={{ fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 22, fontWeight: 800, color: c.col }}>{c.val}</div><div style={{ fontSize: 12, color: "#8b949e", marginTop: 4 }}>{c.label}</div></div>))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
+        <div style={{ ...S.card(), padding: 20 }}>
+          <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 16px" }}>Department-wise Appointments</h3>
+          {deptArr.map(([dept, count]) => (
+            <div key={dept} style={{ marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}><span>{dept}</span><span style={{ fontWeight: 700, color: "#0ea5e9" }}>{count} ({totalAppts > 0 ? Math.round(count / totalAppts * 100) : 0}%)</span></div>
+              <div style={{ height: 6, background: "#1f2937", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", background: "#0ea5e9", borderRadius: 99, width: `${totalAppts > 0 ? (count / totalAppts) * 100 : 0}%` }} /></div>
+            </div>
+          ))}
+          {deptArr.length === 0 && <div style={{ color: "#8b949e", fontSize: 13 }}>No data yet</div>}
+        </div>
+        <div style={{ ...S.card(), padding: 20 }}>
+          <h3 style={{ fontFamily: "'Syne',sans-serif", fontSize: 14, fontWeight: 700, margin: "0 0 16px" }}>Patient Summary</h3>
+          {[["Total Patients", patients.length], ["Total Appointments", appointments.length], ["Total Invoices", bills.length], ["Revenue Collected", fmtCur(totalRevenue)]].map(([k, v]) => (
+            <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #2d3748", fontSize: 13 }}>
+              <span style={{ color: "#8b949e" }}>{k}</span><span style={{ fontWeight: 700 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OnlineBooking({ patients, setPatients, appointments, setAppointments, addNotification, isMobile, toast }) {
+  const [step, setStep] = useState(1);
+  const [sel, setSel] = useState({ doctor: null, date: todayStr(), slot: "", patName: "", patPhone: "", patAge: "", patGender: "Male", notes: "" });
+  const [done, setDone] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  const availableSlots = sel.doctor ? sel.doctor.slots.filter(s => !isSlotTaken(appointments, sel.doctor.id, sel.date, s)) : [];
+
+  const confirm = async () => {
+    setSaving(true);
+    let pat = patients.find(p => p.phone === sel.patPhone);
+    if (!pat) {
+      pat = { id: "P" + uid(), name: sel.patName, phone: sel.patPhone, age: sel.patAge, gender: sel.patGender, email: "", blood: "O+", address: "", joined: todayStr() };
+      await supa.insert("patients", pat);
+      setPatients([pat, ...patients]);
+    }
+    const appt = { id: "A" + uid(), patientid: pat.id, patientname: pat.name, doctorid: sel.doctor.id, doctorname: sel.doctor.name, dept: sel.doctor.dept, date: sel.date, time: sel.slot, status: "Confirmed", fee: sel.doctor.fee, notes: sel.notes };
+    await supa.insert("appointments", appt);
+    setAppointments([appt, ...appointments]);
+    addNotification({ type: "booking", text: `Online booking: ${pat.name} with ${sel.doctor.name}` });
+    setDone(appt); setStep(4); setSaving(false);
+    toast("Appointment booked online!");
+  };
+
+  const reset = () => { setStep(1); setSel({ doctor: null, date: todayStr(), slot: "", patName: "", patPhone: "", patAge: "", patGender: "Male", notes: "" }); setDone(null); };
+
+  return (
+    <div style={{ maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ fontSize: 40, marginBottom: 8 }}>🌐</div>
+        <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: 22, fontWeight: 800, margin: "0 0 4px" }}>Online Booking Portal</h2>
+        <p style={{ color: "#8b949e", fontSize: 13, margin: 0 }}>Book appointments from anywhere</p>
+      </div>
+      {step < 4 && (
+        <div style={{ display: "flex", gap: 0, marginBottom: 32 }}>
+          {["Choose Doctor", "Your Details", "Review"].map((l, i) => (
+            <div key={l} style={{ flex: 1, textAlign: "center" }}>
+              <div style={{ width: 28, height: 28, borderRadius: "50%", background: step > i + 1 ? "#00d9a3" : step === i + 1 ? "#00d9a3" : "#2d3748", color: step >= i + 1 ? "#000" : "#8b949e", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{step > i + 1 ? "✓" : i + 1}</div>
+              <div style={{ fontSize: 11, color: step === i + 1 ? "#00d9a3" : "#8b949e" }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      {step === 1 && (
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 14, marginBottom: 16 }}>
+            {DOCTORS.map(d => (
+              <div key={d.id} onClick={() => setSel({ ...sel, doctor: d, slot: "" })} style={{ ...S.card(), padding: 18, cursor: "pointer", border: sel.doctor?.id === d.id ? "1px solid #00d9a3" : "1px solid #2d3748", background: sel.doctor?.id === d.id ? "rgba(0,217,163,.06)" : "#161b22" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                  <div style={{ ...S.avatar(d.name), width: 44, height: 44, fontSize: 16 }}>{d.name.split(" ").map(w => w[0]).join("")}</div>
+                  <div><div style={{ fontWeight: 700 }}>{d.name}</div><div style={{ fontSize: 12, color: "#0ea5e9" }}>{d.dept}</div></div>
+                </div>
+                <div style={{ fontWeight: 700, color: "#00d9a3" }}>{fmtCur(d.fee)} consultation</div>
+              </div>
+            ))}
+          </div>
+          {sel.doctor && (
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14, marginBottom: 16 }}>
+              <FG label="Date"><input style={S.input} type="date" value={sel.date} onChange={e => setSel({ ...sel, date: e.target.value, slot: "" })} /></FG>
+              <FG label="Time Slot">
+                <select style={S.input} value={sel.slot} onChange={e => setSel({ ...sel, slot: e.target.value })}>
+                  <option value="">-- Select --</option>
+                  {availableSlots.map(s => <option key={s} value={s}>{fmtTime12(s)}</option>)}
+                  {availableSlots.length === 0 && <option disabled>No slots available</option>}
+                </select>
+              </FG>
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button style={{ ...S.btn(), opacity: (!sel.doctor || !sel.slot) ? 0.5 : 1 }} onClick={() => { if (sel.doctor && sel.slot) setStep(2); }}>Next →</button>
+          </div>
+        </div>
+      )}
+      {step === 2 && (
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14, marginBottom: 14 }}>
+            <FG label="Full Name *"><input style={S.input} value={sel.patName} onChange={e => setSel({ ...sel, patName: e.target.value })} placeholder="Your name" /></FG>
+            <FG label="Phone *"><input style={S.input} value={sel.patPhone} onChange={e => setSel({ ...sel, patPhone: e.target.value })} placeholder="Mobile number" /></FG>
+            <FG label="Age"><input style={S.input} type="number" value={sel.patAge} onChange={e => setSel({ ...sel, patAge: e.target.value })} /></FG>
+            <FG label="Gender"><select style={S.input} value={sel.patGender} onChange={e => setSel({ ...sel, patGender: e.target.value })}>{["Male", "Female", "Other"].map(g => <option key={g}>{g}</option>)}</select></FG>
+          </div>
+          <FG label="Symptoms"><textarea style={{ ...S.input, minHeight: 70, resize: "vertical" }} value={sel.notes} onChange={e => setSel({ ...sel, notes: e.target.value })} placeholder="Brief description…" /></FG>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 14 }}>
+            <button style={S.btn("secondary")} onClick={() => setStep(1)}>← Back</button>
+            <button style={{ ...S.btn(), opacity: (!sel.patName || !sel.patPhone) ? 0.5 : 1 }} onClick={() => { if (sel.patName && sel.patPhone) setStep(3); }}>Review →</button>
+          </div>
+        </div>
+      )}
+      {step === 3 && (
+        <div>
+          <div style={{ background: "rgba(0,217,163,.06)", border: "1px solid rgba(0,217,163,.2)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+            <h4 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, margin: "0 0 16px", color: "#00d9a3" }}>Appointment Summary</h4>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
+              {[["Doctor", sel.doctor?.name], ["Department", sel.doctor?.dept], ["Date", fmtDate(sel.date)], ["Time", fmtTime12(sel.slot)], ["Patient", sel.patName], ["Phone", sel.patPhone], ["Fee", fmtCur(sel.doctor?.fee || 0)], ["Notes", sel.notes || "—"]].map(([k, v]) => (
+                <div key={k} style={{ background: "#161b22", borderRadius: 8, padding: 10 }}><div style={{ fontSize: 10, color: "#8b949e", textTransform: "uppercase" }}>{k}</div><div style={{ fontWeight: 600, marginTop: 3, fontSize: 13 }}>{v}</div></div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+            <button style={S.btn("secondary")} onClick={() => setStep(2)}>← Edit</button>
+            <button style={{ ...S.btn(), opacity: saving ? 0.7 : 1 }} onClick={confirm} disabled={saving}>{saving ? "Booking…" : "✓ Confirm Booking"}</button>
+          </div>
+        </div>
+      )}
+       {step === 4 && done && (
+        <div style={{ textAlign: "center", padding: "40px 20px" }}>
+          <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
+          <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: 22, fontWeight: 800, color: "#00d9a3", margin: "0 0 8px" }}>Appointment Confirmed!</h2>
+          <p style={{ color: "#8b949e", marginBottom: 24 }}>Booking ID: <strong style={{ color: "#e6edf3" }}>{done.id}</strong></p>
+          <div style={{ background: "#1f2937", borderRadius: 12, padding: 20, maxWidth: 360, margin: "0 auto 24px", textAlign: "left" }}>
+            {[["Doctor", done.doctorname], ["Date", fmtDate(done.date)], ["Time", fmtTime12(done.time)]].map(([k, v]) => (
+              <div key={k} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}><span style={{ color: "#8b949e", fontSize: 13 }}>{k}</span><span style={{ fontWeight: 600 }}>{v}</span></div>
+            ))}
+          </div>
+          <button style={S.btn()} onClick={reset}>Book Another</button>
+        </div>
+      )}
+    </div>
+  );
+}
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [page, setPage] = useState("dashboard");
+  const [patients, setPatients] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [bills, setBills] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
+  const width = useWindowWidth();
+  const isMobile = width < 860;
+  const toast = (msg) => { setToastMsg(msg); };
+
+  const loadData = async () => {
+    setLoading(true);
+    const [p, a, b, rx, d, n] = await Promise.all([
+      supa.get("patients"), supa.get("appointments"), supa.get("bills"),
+      supa.get("prescriptions"), supa.get("documents"), supa.get("notifications"),
+    ]);
+    setPatients(Array.isArray(p) ? p : []);
+    setAppointments(Array.isArray(a) ? a : []);
+    setBills(Array.isArray(b) ? b : []);
+    setPrescriptions(Array.isArray(rx) ? rx : []);
+    setDocuments(Array.isArray(d) ? d : []);
+    setNotifications(Array.isArray(n) ? n : []);
+    setLoading(false);
+  };
+  useEffect(() => { if (user) loadData(); }, [user]);
+
+  const addNotification = async (n) => {
+    const notif = { id: "N" + uid(), read: false, date: todayStr(), ...n };
+    await supa.insert("notifications", notif);
+    setNotifications(prev => [notif, ...prev]);
+  };
+
+  if (!user) return <LoginScreen onLogin={u => setUser(u)} />;
+
+  const NAV = [
+    { sec: "Overview", items: [{ id: "dashboard", icon: "🏠", label: "Dashboard" }] },
+    { sec: "Management", items: [{ id: "patients", icon: "🧑‍⚕️", label: "Patients" }, { id: "appointments", icon: "📅", label: "Appointments" }, { id: "calendar", icon: "🗓️", label: "Calendar" }, { id: "prescriptions", icon: "💊", label: "Prescriptions" }, { id: "followups", icon: "🔁", label: "Follow-ups" }, { id: "billing", icon: "🧾", label: "Billing" }] },
+    { sec: "Staff", items: [{ id: "doctors", icon: "👨‍⚕️", label: "Doctors" }] },
+    { sec: "Portal", items: [{ id: "online", icon: "🌐", label: "Online Booking" }] },
+    { sec: "Insights", items: [{ id: "reports", icon: "📊", label: "Reports" }] },
+  ];
+
+  const TITLES = { dashboard: "Dashboard", patients: "Patients", appointments: "Appointments", calendar: "Calendar", prescriptions: "Prescriptions", followups: "Follow-ups", billing: "Billing & Invoices", doctors: "Doctors & Staff", online: "Online Booking Portal", reports: "Reports" };
+  const pending = appointments.filter(a => a.status === "Pending").length;
+  const go = (id) => { setPage(id); setOpen(false); };
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0d1117; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #161b22; }
+        ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 99px; }
+        select option { background: #1f2937; color: #e6edf3; }
+        .nav-row:hover { background: rgba(255,255,255,0.05) !important; }
+        @media print { body * { visibility: hidden; } #invoice-print, #invoice-print * { visibility: visible; } #invoice-print { position: absolute; left: 0; top: 0; width: 100%; } }
+      `}</style>
+      {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
+      <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(0,0,0,0.65)", backdropFilter: "blur(3px)", display: open ? "block" : "none" }} />
+      <div style={{ position: "fixed", top: 0, left: 0, height: "100vh", width: 248, background: "#161b22", borderRight: "1px solid #2d3748", display: "flex", flexDirection: "column", zIndex: 400, visibility: open ? "visible" : "hidden", opacity: open ? 1 : 0, transform: open ? "translateX(0)" : "translateX(-100%)", transition: "transform 0.25s ease, opacity 0.25s ease, visibility 0.25s", boxShadow: "8px 0 40px rgba(0,0,0,0.7)" }}>
+        <div style={{ padding: "20px 18px 16px", borderBottom: "1px solid #2d3748", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 17, fontWeight: 800, color: "#00d9a3" }}>🏥 MedCare</div>
+            <div style={{ fontSize: 11, color: "#8b949e", marginTop: 2 }}>Clinic Management System</div>
+          </div>
+          <div onClick={() => setOpen(false)} style={{ cursor: "pointer", color: "#8b949e", fontSize: 13, padding: "5px 8px", borderRadius: 6, background: "#1f2937", border: "1px solid #2d3748" }}>✕</div>
+        </div>
+        <div style={{ flex: 1, padding: "8px 8px", overflowY: "auto" }}>
+          {NAV.map(section => (
+            <div key={section.sec}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#4a5568", letterSpacing: 1, textTransform: "uppercase", padding: "12px 12px 4px" }}>{section.sec}</div>
+              {section.items.map(item => (
+                <div key={item.id} className="nav-row" onClick={() => go(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, cursor: "pointer", color: page === item.id ? "#00d9a3" : "#8b949e", background: page === item.id ? "rgba(0,217,163,0.1)" : "transparent", fontSize: 13, fontWeight: page === item.id ? 700 : 500, marginBottom: 2 }}>
+                  <span style={{ fontSize: 16 }}>{item.icon}</span>
+                  <span style={{ flex: 1 }}>{item.label}</span>
+                  {item.id === "appointments" && pending > 0 && <span style={{ background: "#f43f5e", color: "#fff", borderRadius: 99, padding: "1px 8px", fontSize: 10, fontWeight: 700 }}>{pending}</span>}
+                </div>
+              ))}
+            </div>
+          ))}
+          </div>
+        <div style={{ padding: 14, borderTop: "1px solid #2d3748" }}>
+          <div style={{ background: "#1f2937", borderRadius: 8, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, color: "#8b949e" }}>Logged in as</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#e6edf3", marginTop: 2 }}>{user.email}</div>
+            <button style={{ ...S.btn("danger"), marginTop: 8, padding: "5px 10px", fontSize: 11, width: "100%", justifyContent: "center" }} onClick={() => setUser(null)}>Sign Out</button>
+          </div>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", fontFamily: "'DM Sans',sans-serif", background: "#0d1117", color: "#e6edf3", fontSize: 14 }}>
+        <div style={{ height: 56, padding: "0 16px", background: "#161b22", borderBottom: "1px solid #2d3748", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0 }}>
+            <button onClick={() => setOpen(v => !v)} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 5, cursor: "pointer", width: 38, height: 38, borderRadius: 8, background: "#1f2937", border: "1px solid #2d3748", padding: 0, flexShrink: 0 }}>
+              {[0, 1, 2].map(i => <span key={i} style={{ display: "block", width: 16, height: 2, background: "#e6edf3", borderRadius: 99 }} />)}
+            </button>
+            <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 15 : 18, fontWeight: 700, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{TITLES[page]}</h2>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 12, flexShrink: 0 }}>
+            {!isMobile && pending > 0 && <span style={{ fontSize: 12, color: "#f43f5e", fontWeight: 600 }}>{pending} pending</span>}
+            {!isMobile && <span style={{ fontSize: 12, color: "#8b949e" }}>{patients.length} patients</span>}
+            <NotificationBell notifications={notifications} setNotifications={setNotifications} />
+            <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(0,217,163,0.15)", color: "#00d9a3", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+              {(user.email || "A")[0].toUpperCase()}
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px 12px" : "24px 28px" }}>
+          {loading ? <Spinner /> : (
+            <>
+              {page === "dashboard" && <Dashboard patients={patients} appointments={appointments} bills={bills} prescriptions={prescriptions} isMobile={isMobile} />}
+              {page === "patients" && <Patients patients={patients} setPatients={setPatients} appointments={appointments} bills={bills} prescriptions={prescriptions} documents={documents} setDocuments={setDocuments} isMobile={isMobile} toast={toast} />}
+              {page === "appointments" && <Appointments appointments={appointments} setAppointments={setAppointments} patients={patients} addNotification={addNotification} isMobile={isMobile} toast={toast} />}
+              {page === "calendar" && <CalendarView appointments={appointments} isMobile={isMobile} />}
+              {page === "prescriptions" && <Prescriptions prescriptions={prescriptions} setPrescriptions={setPrescriptions} patients={patients} addNotification={addNotification} isMobile={isMobile} toast={toast} />}
+              {page === "followups" && <FollowUps prescriptions={prescriptions} isMobile={isMobile} />}
+              {page === "billing" && <Billing bills={bills} setBills={setBills} patients={patients} addNotification={addNotification} isMobile={isMobile} toast={toast} />}
+              {page === "doctors" && <Doctors appointments={appointments} isMobile={isMobile} />}
+              {page === "online" && <OnlineBooking patients={patients} setPatients={setPatients} appointments={appointments} setAppointments={setAppointments} addNotification={addNotification} isMobile={isMobile} toast={toast} />}
+              {page === "reports" && <Reports patients={patients} appointments={appointments} bills={bills} isMobile={isMobile} />}
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+              }
+      
