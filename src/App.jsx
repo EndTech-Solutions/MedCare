@@ -915,7 +915,7 @@ const recordPayment = async (id, amt, mode) => {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
                   <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>BILL TO</div><div style={{ fontWeight: 700 }}>{viewBill.patientname}</div></div>
                   <div style={{ padding: 12, background: "#f9fafb", borderRadius: 8 }}><div style={{ fontSize: 11, color: "#6b7280", marginBottom: 4 }}>DOCTOR</div><div style={{ fontWeight: 700 }}>{viewBill.doctorname || "—"}</div></div>
-                </div>
+            
                 </div>
                 <div style={{ marginTop: 24, padding: 12, background: "#f9fafb", borderRadius: 8, fontSize: 12, color: "#6b7280", textAlign: "center" }}>Thank you for choosing MedCare Clinic. Get well soon! 🌿</div>
               </div>
