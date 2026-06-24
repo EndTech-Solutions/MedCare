@@ -774,12 +774,6 @@ function Billing({ bills, setBills, patients, addNotification, isMobile, toast }
     if (exists) setF({ ...f, items: f.items.map(i => i.name === svc.name ? { ...i, qty: i.qty + 1 } : i) });
     else setF({ ...f, items: [...f.items, { name: svc.name, price: svc.price, gst: svc.gst, qty: 1 }] });
   };
-  const addItem = (svc) => {
-    const exists = f.items.find(i => i.name === svc.name);
-    if (exists) setF({ ...f, items: f.items.map(i => i.name === svc.name ? { ...i, qty: i.qty + 1 } : i) });
-    else setF({ ...f, items: [...f.items, { name: svc.name, price: svc.price, gst: svc.gst, qty: 1 }] });
-  };
-
   const save = async () => {
     if (!f.patientId || f.items.length === 0) return;
     setSaving(true);
