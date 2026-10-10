@@ -17,3 +17,4 @@
     "vite": "^5.0.8"
   }
 }
+npm install @supabase/supabase-js
